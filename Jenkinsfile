@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  environment {
+    DOCKER_IMAGE = "my-new-web-app"
+    DOCKER_REGISTRY = "xi2481-santosh"
+    VERSION = "${env.BUILD_ID}" // Uses Jenkins build number as version
+  }
   stages {
     stage('Checkout') {
       steps {
@@ -16,19 +21,14 @@ pipeline {
         sh 'npm test'
       }
     }
-    stage('Build Docker Image') {
+    stage('Build and Tag Docker Image') {
       steps {
-        sh 'docker build -t nnksantosh/my-web-app:latest .'
-        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'nnksantosh', passwordVariable: 'Swaraj@7620')]) {
+        sh "docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${VERSION} -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest ."
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'xi2481-santosh', passwordVariable: 'Swaraj@7620')]) {
           sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-          sh 'docker push nnksantosh/my-web-app:latest'
+          sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${VERSION}"
+          sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest"
         }
-      }
-    }
-    stage('Deploy to Kubernetes') {
-      steps {
-        sh 'kubectl apply -f deployment.yaml'
-        sh 'kubectl apply -f service.yaml'
       }
     }
   }
