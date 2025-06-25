@@ -8,8 +8,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-	git branch: 'main'
-        url: 'https://github.com/xi2481-santosh/my-web-app.git'
+	git 'https://github.com/xi2481-santosh/my-web-app.git'
       }
     }
     stage('Build') {
