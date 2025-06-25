@@ -21,15 +21,5 @@ pipeline {
         sh 'npm test'
       }
     }
-    stage('Build and Tag Docker Image') {
-      steps {
-        sh "docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${VERSION} -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest ."
-        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'xi2481-santosh', passwordVariable: 'Swaraj@7620')]) {
-          sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-          sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${VERSION}"
-          sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest"
-        }
-      }
-    }
-  }
+}
 }
