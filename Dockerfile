@@ -1,7 +1,14 @@
-FROM node:latest
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
+# Use an official Nginx image as the base
+FROM nginx:alpine
+
+# Remove the default Nginx website
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy your website files into the Nginx web root
+COPY . /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx when the container launches
+CMD ["nginx", "-g", "daemon off;"]
