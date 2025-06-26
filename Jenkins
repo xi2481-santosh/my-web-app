@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    environment {
+    VERSION = '5.0.0'
+}
+    stages {
+        stage("code") {
+            steps {
+                echo 'Code Testing'
+                git url: "https://github.com/xi2481-santosh/my-web-app.git", branch: "main"
+            }
+        }
+        stage("Build") {
+            steps {
+                echo 'Code Building'
+                sh 'docker build -t myapp .'
+            }
+        }
+        stage("Push to dockerHub") {
+            steps {
+                echo 'Push to dockerHub'
+                withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubuser")]){
+                sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
+                sh "docker tag myapp ${env.dockerhubuser}/myapp:$VERSION"
+                sh "docker push ${env.dockerhubuser}/myapp:$VERSION"
+                }
+            }
+        }
+        stage("Deploy"){
+            steps{
+                echo 'Deploying to container'
+            }
+        }
+    }
+}
+
