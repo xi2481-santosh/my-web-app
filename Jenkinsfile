@@ -29,7 +29,7 @@ pipeline {
         stage("Deploy"){
             steps{
                 echo 'Deploying to container'
-		sh "docker run -d -p 80:80 ${env.dockerhubuser}/myapp:$VERSION"
+		sh "docker run -d -p 80:80 ${env.dockerhubuser}/myapp:latest"
             }
         }
     }
