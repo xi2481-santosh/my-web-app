@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-    VERSION = '7.0.0'
+    VERSION = '9.0.0'
 }
     stages {
         stage("code") {
@@ -29,7 +29,8 @@ pipeline {
         stage("Deploy"){
             steps{
                 echo 'Deploying to container'
-		sh "docker run -d -p 80:80 ${env.dockerhubuser}/myapp:latest"
+		sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
+		sh "docker run -d -p 80:80 ${env.dockerhubuser}/myapp:$VERSION"
             }
         }
     }
