@@ -29,9 +29,6 @@ pipeline {
         stage("Deploy"){
             steps{
                 echo 'Deploying to container'
-
-                withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerhubpass",usernameVariable:"dockerhubuser")]){
-		sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
 		sh "docker run -d -p 80:80 ${env.dockerhubuser}/myapp:$VERSION"
             }
         }
