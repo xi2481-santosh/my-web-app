@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+    dockerhubuser= 'nnksantosh'
     VERSION = '2.1'
 }
     stages {
