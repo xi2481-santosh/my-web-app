@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-    VERSION = '5.0.0'
+    VERSION = '7.0.0'
 }
     stages {
         stage("code") {
