@@ -4,16 +4,19 @@ pipeline {
     USER= 'nnksantosh'
     VERSION = '2.1'
 }
-                script {
-                    env.COMMIT_ID = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-                }
-echo $COMMIT_ID
+  
     stages {
         stage("code") {
             steps {
                 echo 'Code Testing'
                 git url: "https://github.com/xi2481-santosh/my-web-app.git", branch: "main"
             }
+		
+		script {
+                    env.COMMIT_ID = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                }
+		
+		echo $COMMIT_ID
         }
         stage("Build") {
             steps {
