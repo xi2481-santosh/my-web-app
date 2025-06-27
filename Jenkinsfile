@@ -24,15 +24,21 @@ pipeline {
 
         stage("Trivy Image Scan") {
             steps {
-                script {
-                    echo "Running Trivy scan on image: ${IMAGE_NAME}"
-                    sh """
-                    docker tag myapp ${IMAGE_NAME}
-                    docker run --rm \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        -v \$HOME/.cache:/root/.cache \
-                        aquasec/trivy image --severity HIGH,CRITICAL --exit-code 0 ${IMAGE_NAME}
-                    """
+                script {  
+            
+		echo "Scanning Docker image with Trivy and saving report..."
+            sh """
+            docker tag myapp ${IMAGE_NAME}
+            docker run --rm \
+              -v /var/run/docker.sock:/var/run/docker.sock \
+              -v \$HOME/.cache:/root/.cache \
+              -v \$(pwd):/report \
+              aquasec/trivy image \
+                --severity HIGH,CRITICAL \
+                --format table \
+                --output /report/trivy-report.txt \
+                ${IMAGE_NAME}
+            """
                 }
             }
         }
