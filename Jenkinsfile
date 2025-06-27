@@ -18,6 +18,11 @@ pipeline {
                 sh 'docker build -t myapp .'
             }
         }
+	stage("Trivy Scan"){
+		steps{
+			sh 'trivy ${env.dockerhubuser}/myapp:$VERSION'
+			}
+}
         stage("Push to dockerHub") {
             steps {
                 echo 'Push to dockerHub'
