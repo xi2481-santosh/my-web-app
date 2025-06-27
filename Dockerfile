@@ -3,8 +3,9 @@ FROM nginx:alpine
 
 # Remove the default Nginx website
 RUN rm -rf /usr/share/nginx/html/* \
-sudo curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
-sudo apt-get update -y
+wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb \
+sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+
 
 # Copy your website files into the Nginx web root
 COPY . /usr/share/nginx/html
