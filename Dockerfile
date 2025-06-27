@@ -2,12 +2,9 @@
 FROM nginx:alpine
 
 # Remove the default Nginx website
-RUN rm -rf /usr/share/nginx/html/* \
-wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb \
-sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+RUN rm -rf /usr/share/nginx/html/* 
 
-
-# Copy your website files into the Nginx web root
+#Copy your website files into the Nginx web root
 COPY . /usr/share/nginx/html
 
 # Expose port 80
