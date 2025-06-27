@@ -20,7 +20,14 @@ pipeline {
         }
 	stage("Trivy Scan"){
 		steps{
-			sh 'trivy ${env.dockerhubuser}/myapp:$VERSION'
+			script {
+                    // Pull Trivy image and run scan
+                    sh '''
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      aquasec/trivy:latest image ${env.dockerhubuser}/myapp:$VERSION
+                    '''
+                }
 			}
 }
         stage("Push to dockerHub") {
